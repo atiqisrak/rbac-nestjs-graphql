@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package rbac;
+
+service RbacService {
+  rpc Authenticate(AuthRequest) returns (AuthResponse);
+  rpc CheckPermission(CheckPermissionRequest) returns (CheckPermissionResponse);
+  rpc CheckRole(CheckRoleRequest) returns (CheckRoleResponse);
+  rpc GetUserRoles(GetUserRolesRequest) returns (GetUserRolesResponse);
+  rpc GetUserPermissions(GetUserPermissionsRequest) returns (GetUserPermissionsResponse);
+  rpc CheckResourceAccess(CheckResourceAccessRequest) returns (CheckResourceAccessResponse);
+}
+
+message AuthRequest {
+  string usernameOrEmail = 1;
+  string password = 2;
+}
+
+message AuthResponse {
+  string accessToken = 1;
+  string refreshToken = 2;
+  string userId = 3;
+  string email = 4;
+  string username = 5;
+}
+
+message CheckPermissionRequest {
+  string userId = 1;
+  string permissionName = 2;
+}
+
+message CheckPermissionResponse {
+  bool hasPermission = 1;
+}
+
+message CheckRoleRequest {
+  string userId = 1;
+  string roleName = 2;
+}
+
+message CheckRoleResponse {
+  bool hasRole = 1;
+}
+
+message GetUserRolesRequest {
+  string userId = 1;
+}
+
+message GetUserRolesResponse {
+  repeated string roles = 1;
+}
+
+message GetUserPermissionsRequest {
+  string userId = 1;
+}
+
+message GetUserPermissionsResponse {
+  repeated string permissions = 1;
+}
+
+message CheckResourceAccessRequest {
+  string userId = 1;
+  string resourceType = 2;
+  string resourceId = 3;
+  string action = 4;
+}
+
+message CheckResourceAccessResponse {
+  bool hasAccess = 1;
+}
+
