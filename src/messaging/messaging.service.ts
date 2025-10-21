@@ -6,23 +6,23 @@ import { Kafka, Producer, Consumer } from 'kafkajs';
 @Injectable()
 export class MessagingService {
   private readonly logger = new Logger(MessagingService.name);
-  private rabbitmqConnection: amqp.Connection;
-  private rabbitmqChannel: amqp.Channel;
+  private rabbitmqConnection: any = null;
+  private rabbitmqChannel: any = null;
   private kafkaProducer: Producer;
   private kafkaConsumer: Consumer;
   private kafka: Kafka;
 
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService) { }
 
   async initRabbitMQ() {
     try {
       const url = this.configService.get('rabbitmq.url');
       this.rabbitmqConnection = await amqp.connect(url);
       this.rabbitmqChannel = await this.rabbitmqConnection.createChannel();
-      
+
       const queue = this.configService.get('rabbitmq.queue');
       await this.rabbitmqChannel.assertQueue(queue, { durable: true });
-      
+
       this.logger.log('RabbitMQ initialized successfully');
     } catch (error) {
       this.logger.error('Failed to initialize RabbitMQ', error);
@@ -33,7 +33,7 @@ export class MessagingService {
     try {
       const brokers = this.configService.get('kafka.brokers');
       const clientId = this.configService.get('kafka.clientId');
-      
+
       this.kafka = new Kafka({
         clientId,
         brokers,
@@ -41,7 +41,7 @@ export class MessagingService {
 
       this.kafkaProducer = this.kafka.producer();
       await this.kafkaProducer.connect();
-      
+
       this.logger.log('Kafka initialized successfully');
     } catch (error) {
       this.logger.error('Failed to initialize Kafka', error);
@@ -129,16 +129,16 @@ export class MessagingService {
       const groupId = this.configService.get('kafka.groupId');
       this.kafkaConsumer = this.kafka.consumer({ groupId });
       await this.kafkaConsumer.connect();
-      
+
       await this.kafkaConsumer.subscribe({ topics, fromBeginning: false });
-      
+
       await this.kafkaConsumer.run({
         eachMessage: async ({ topic, partition, message }) => {
           const content = JSON.parse(message.value.toString());
           await handler(content);
         },
       });
-      
+
       this.logger.log(`Started consuming from Kafka topics: ${topics.join(', ')}`);
     } catch (error) {
       this.logger.error('Failed to consume from Kafka', error);

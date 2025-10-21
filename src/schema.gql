@@ -1,0 +1,207 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AssignPermissionDto {
+  permissionId: String!
+  roleId: String!
+}
+
+input AssignRoleDto {
+  roleId: String!
+  userId: String!
+}
+
+type AuthResponse {
+  accessToken: String!
+  email: String!
+  refreshToken: String!
+  userId: String!
+  username: String!
+}
+
+input CheckResourceAccessDto {
+  action: String!
+  resourceId: String!
+  resourceType: String!
+  userId: String!
+}
+
+input CreatePermissionDto {
+  action: String!
+  description: String
+  resource: String!
+}
+
+input CreatePolicyDto {
+  conditions: String!
+  description: String
+  effect: String! = "ALLOW"
+  name: String!
+}
+
+input CreateRoleDto {
+  description: String
+  name: String!
+  parentId: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input GrantResourcePermissionDto {
+  actions: [String!]!
+  resourceId: String!
+  resourceType: String!
+  userId: String!
+}
+
+input LoginDto {
+  password: String!
+  usernameOrEmail: String!
+}
+
+type Mutation {
+  assignPermissionToRole(input: AssignPermissionDto!): Role!
+  assignRole(input: AssignRoleDto!): User!
+  createPermission(input: CreatePermissionDto!): Permission!
+  createPolicy(input: CreatePolicyDto!): Policy!
+  createRole(input: CreateRoleDto!): Role!
+  grantResourcePermission(input: GrantResourcePermissionDto!): ResourcePermission!
+  login(input: LoginDto!): AuthResponse!
+  logout: Boolean!
+  refreshToken: AuthResponse!
+  register(input: RegisterDto!): AuthResponse!
+  removePermission(id: String!): Permission!
+  removePermissionFromRole(permissionId: String!, roleId: String!): Role!
+  removePolicy(id: String!): Policy!
+  removeRole(id: String!): Role!
+  removeUser(id: String!): User!
+  removeUserRole(roleId: String!, userId: String!): User!
+  revokeResourcePermission(resourceId: String!, resourceType: String!, userId: String!): Boolean!
+  updatePermission(id: String!, input: UpdatePermissionDto!): Permission!
+  updatePolicy(id: String!, input: UpdatePolicyDto!): Policy!
+  updateRole(id: String!, input: UpdateRoleDto!): Role!
+  updateUser(id: String!, input: UpdateUserDto!): User!
+}
+
+type Permission {
+  action: String!
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  isActive: Boolean!
+  name: String!
+  resource: String!
+  updatedAt: DateTime!
+}
+
+type Policy {
+  conditions: String!
+  createdAt: DateTime!
+  description: String
+  effect: PolicyEffect!
+  id: ID!
+  isActive: Boolean!
+  name: String!
+  updatedAt: DateTime!
+}
+
+enum PolicyEffect {
+  ALLOW
+  DENY
+}
+
+type Query {
+  checkPermission(permissionName: String!, userId: String!): Boolean!
+  checkResourceAccess(input: CheckResourceAccessDto!): Boolean!
+  me: User!
+  myProfile: User!
+  permission(id: String!): Permission!
+  permissions: [Permission!]!
+  policies: [Policy!]!
+  policy(id: String!): Policy!
+  resourcePermissions(resourceId: String!, resourceType: String!): [ResourcePermission!]!
+  role(id: String!): Role!
+  rolePermissions(roleId: String!): [String!]!
+  roles: [Role!]!
+  user(id: String!): User!
+  userPermissions(userId: String!): [String!]!
+  userResourcePermissions(resourceType: String, userId: String!): [ResourcePermission!]!
+  userRoles(userId: String!): [String!]!
+  users: [User!]!
+}
+
+input RegisterDto {
+  email: String!
+  firstName: String
+  lastName: String
+  password: String!
+  username: String!
+}
+
+type ResourcePermission {
+  actions: [String!]!
+  createdAt: DateTime!
+  id: ID!
+  resourceId: String!
+  resourceType: String!
+  updatedAt: DateTime!
+  userId: String!
+}
+
+type Role {
+  createdAt: DateTime!
+  description: String
+  id: ID!
+  isActive: Boolean!
+  name: String!
+  parentId: String
+  updatedAt: DateTime!
+}
+
+input UpdatePermissionDto {
+  action: String
+  description: String
+  isActive: Boolean
+  resource: String
+}
+
+input UpdatePolicyDto {
+  conditions: String
+  description: String
+  effect: String
+  isActive: Boolean
+  name: String
+}
+
+input UpdateRoleDto {
+  description: String
+  isActive: Boolean
+  name: String
+  parentId: String
+}
+
+input UpdateUserDto {
+  email: String
+  firstName: String
+  isActive: Boolean
+  lastName: String
+  username: String
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  emailVerifiedAt: DateTime
+  firstName: String
+  id: ID!
+  isActive: Boolean!
+  isEmailVerified: Boolean!
+  lastLoginAt: DateTime
+  lastName: String
+  updatedAt: DateTime!
+  username: String!
+}

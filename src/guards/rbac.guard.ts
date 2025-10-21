@@ -6,7 +6,7 @@ import { ROLES_KEY } from '../decorators/require-role.decorator';
 
 @Injectable()
 export class RbacGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(private reflector: Reflector) { }
 
   canActivate(context: ExecutionContext): boolean {
     const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
@@ -51,7 +51,7 @@ export class RbacGuard implements CanActivate {
   }
 
   private getUser(context: ExecutionContext) {
-    const contextType = context.getType();
+    const contextType = context.getType<string>();
 
     if (contextType === 'http') {
       return context.switchToHttp().getRequest().user;

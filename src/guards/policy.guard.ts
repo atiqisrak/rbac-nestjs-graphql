@@ -9,7 +9,7 @@ export class PolicyGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private policiesService: PoliciesService,
-  ) {}
+  ) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requiredPolicies = this.reflector.getAllAndOverride<string[]>(
@@ -43,7 +43,7 @@ export class PolicyGuard implements CanActivate {
   }
 
   private getUser(context: ExecutionContext) {
-    const contextType = context.getType();
+    const contextType = context.getType<string>();
 
     if (contextType === 'http') {
       return context.switchToHttp().getRequest().user;
@@ -62,7 +62,7 @@ export class PolicyGuard implements CanActivate {
   }
 
   private getRequest(context: ExecutionContext) {
-    const contextType = context.getType();
+    const contextType = context.getType<string>();
 
     if (contextType === 'http') {
       return context.switchToHttp().getRequest();

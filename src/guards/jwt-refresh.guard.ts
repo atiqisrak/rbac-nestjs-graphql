@@ -5,7 +5,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 @Injectable()
 export class JwtRefreshGuard extends AuthGuard('jwt-refresh') {
   getRequest(context: ExecutionContext) {
-    const contextType = context.getType();
+    const contextType = context.getType<string>();
 
     if (contextType === 'http') {
       return context.switchToHttp().getRequest();
