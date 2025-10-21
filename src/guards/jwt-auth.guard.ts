@@ -24,7 +24,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   }
 
   getRequest(context: ExecutionContext) {
-    const contextType = context.getType();
+    const contextType = context.getType<string>();
 
     if (contextType === 'http') {
       return context.switchToHttp().getRequest();

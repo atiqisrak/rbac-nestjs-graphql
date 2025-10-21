@@ -2,7 +2,7 @@ module.exports = {
     apps: [
         {
             name: 'rbac-service',
-            script: 'dist/main.js',
+            script: 'dist/src/main.js',
             instances: 2,
             exec_mode: 'cluster',
             env: {
